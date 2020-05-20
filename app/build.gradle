@@ -1,0 +1,79 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    def globalConfig = rootProject.extensions.getByName('ext')
+
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.jafir.gps"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    signingConfigs {
+        debug {
+            storeFile file('../buildsystem/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('../buildsystem/jafir.keystore')
+            storePassword '7632785'
+            keyAlias 'jafir'
+            keyPassword '7632785'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+
+    // Android official support dependencies
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents:$rootProject.autoDisposeVersion"
+
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
+    implementation "com.github.tbruyelle:rxpermissions:$rootProject.rxpermissionsVersion"
+
+    implementation  'com.amap.api:location:4.9.0'
+
+    implementation 'com.xdandroid:hellodaemon:+'
+}

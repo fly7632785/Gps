@@ -1,0 +1,51 @@
+allprojects {
+    repositories {
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
+        jcenter()
+    }
+}
+
+ext {
+    // SDK and tools version
+    androidBuildToolsVersion = '26.0.3'
+    androidMinSdkVersion = 14
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
+
+    // App dependencies version
+    supportLibraryVersion = '27.1.1'
+    constraintVersion = '1.1.3'
+    roomVersion = '1.1.1'
+    sqlbriteVersion = '2.0.0'
+    eventbusVersion = '3.1.1'
+    leakcanaryVersion = '1.6.3'
+    stethoVersion = '1.5.0'
+    androidProcessesVersion = '1.1.1'
+    retrofitVersion = '2.6.0'
+    okHttpVersion = '3.11.0'
+    daggerVersion = '2.21'
+    rxAndroidVersion = '2.1.1'
+    autoDisposeVersion = '1.0.0-RC3'
+    butterKnifeVersion = '10.2.1'
+    ijkplayerVersion = '0.8.8'
+    rxDownloadVersion = '1.2.7'
+    gsonVersion = '2.8.5'
+    glideVersion = '4.9.0'
+    aspectVersion = '1.9.1'
+    nanohttpdVersion = '2.3.1'
+    rxpermissionsVersion = '0.10.2'
+    semverVersion = '0.9.0'
+    zxingVersion = '3.3.3'
+    mdjVersion = '3.9.2.1'
+    buglyVersion = '2.6.6'
+    chardetVersion = '1.0.3'
+    dangbeiVersion = '3.2.7'
+    ossVersion = '2.9.2'
+    dom4jVersion = '1.6.1'
+    junitVersion = '4.12'
+    robolectricVersion = '4.1'
+    umengAnalyticsVersion = '8.1.6'
+    umengCommonVersion = '2.2.5'
+}
+
