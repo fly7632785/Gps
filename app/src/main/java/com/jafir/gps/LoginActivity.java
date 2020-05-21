@@ -3,6 +3,7 @@ package com.jafir.gps;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +51,12 @@ public class LoginActivity extends FrameActivity {
                     }
                 }, e -> {
                 });
+
+        if (!TextUtils.isEmpty(PrefManager.getInstance(this).userId())) {
+            Toast.makeText(LoginActivity.this, "已登录", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, GpsActivity.class));
+            finish();
+        }
     }
 
     @OnClick(R.id.login)
@@ -65,6 +72,7 @@ public class LoginActivity extends FrameActivity {
                     if (loginResult.getCode() == 200) {
                         PrefManager.getInstance(LoginActivity.this).setUserId(String.valueOf(loginResult.getData().getUser_id()));
                         startActivity(new Intent(LoginActivity.this, GpsActivity.class));
+                        finish();
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     } else {
                         PrefManager.getInstance(LoginActivity.this).setUserId("");

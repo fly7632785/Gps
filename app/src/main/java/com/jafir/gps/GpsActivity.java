@@ -1,24 +1,17 @@
 package com.jafir.gps;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.view.WindowManager;
 
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.MyLocationStyle;
+import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * created by jafir on 2020-05-20
@@ -26,131 +19,70 @@ import butterknife.BindView;
 public class GpsActivity extends FrameActivity {
 
     private static final String TAG = "GpsActivity";
-    @BindView(R.id.gpsinfo)
-    TextView mGpsInfo;
-
-    //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
-    //声明定位回调监听器
-    public AMapLocationListener mLocationListener = amapLocation -> {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-//可在其中解析amapLocation获取相应内容。
-                Log.d("mapLocation", amapLocation.toString());
-                //获取定位时间
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date();
-                df.format(date);
-                mGpsInfo.setText(String.format("经度：%s\t纬度：%s\t地址：%s\n%s", amapLocation.getLongitude(), amapLocation.getLatitude(), amapLocation.getAddress(), df.format(date)));
-                Log.d(TAG, String.format("经度：%s\t纬度：%s\t地址：%s\n%s", amapLocation.getLongitude(), amapLocation.getLatitude(), amapLocation.getAddress(), df.format(date)));
-            } else {
-                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + amapLocation.getErrorCode() + ", errInfo:"
-                        + amapLocation.getErrorInfo());
-            }
-        }
-    };
-
-    //声明AMapLocationClientOption对象
-    public AMapLocationClientOption mLocationOption = null;
+    @BindView(R.id.map)
+    MapView mMapView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        mGpsInfo.setText("正在定位中...");
-        initGps();
-
+        mMapView.onCreate(savedInstanceState);
         startService(new Intent(this, KeepLiveService.class));
+        initMap();
     }
 
+    private void initMap() {
+        MyLocationStyle myLocationStyle;
+        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        AMap map = mMapView.getMap();
+        map.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+        map.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        map.getUiSettings().setMyLocationButtonEnabled(true); //显示默认的定位按钮
+        map.setMyLocationEnabled(true);// 可触发定位并显示当前位置
+        map.moveCamera(CameraUpdateFactory.zoomTo(16));
+    }
+
+
+    @OnClick(R.id.logout)
+    public void logout(){
+        PrefManager.getInstance(this).setUserId("");
+        finish();
+    }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (mLocationClient != null) {
-            Log.d(TAG, "onRestart startLocation");
-            mLocationClient.startLocation();
-        }
+    protected void onDestroy() {
+        super.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
+        mMapView.onDestroy();
     }
 
-    private void initGps() {
-//初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-//设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
-
-        //初始化AMapLocationClientOption对象
-        mLocationOption = new AMapLocationClientOption();
-        /**
-         * 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
-         */
-        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
-
-        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-
-//        mLocationOption.setOnceLocation(true);
-        mLocationOption.setOnceLocationLatest(true);
-
-        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-        mLocationOption.setInterval(5000);
-
-        mLocationClient.setLocationOption(mLocationOption);
-
-        //启动后台定位，第一个参数为通知栏ID，建议整个APP使用一个
-        //todo 关闭，使用自己的keepLiveService保活
-//        mLocationClient.enableBackgroundLocation(2001, buildNotification());
-
-        //启动定位
-        mLocationClient.startLocation();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        mMapView.onResume();
     }
 
-    private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
-    private NotificationManager notificationManager = null;
-    boolean isCreateChannel = false;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
+        mMapView.onPause();
+    }
 
-    @SuppressLint("NewApi")
-    private Notification buildNotification() {
-
-        Notification.Builder builder = null;
-        Notification notification = null;
-        if (android.os.Build.VERSION.SDK_INT >= 26) {
-            //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
-            if (null == notificationManager) {
-                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            }
-            String channelId = getPackageName();
-            if (!isCreateChannel) {
-                NotificationChannel notificationChannel = new NotificationChannel(channelId,
-                        NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-                notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
-                notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
-                notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
-                notificationManager.createNotificationChannel(notificationChannel);
-                isCreateChannel = true;
-            }
-            builder = new Notification.Builder(getApplicationContext(), channelId);
-        } else {
-            builder = new Notification.Builder(getApplicationContext());
-        }
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Gps定位")
-                .setContentText("正在后台运行")
-                .setWhen(System.currentTimeMillis());
-
-        if (android.os.Build.VERSION.SDK_INT >= 16) {
-            notification = builder.build();
-        } else {
-            return builder.getNotification();
-        }
-        return notification;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
+        mMapView.onSaveInstanceState(outState);
     }
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        IntentWrapper.onBackPressed(this);
+//        moveTaskToBack(true);
     }
 }

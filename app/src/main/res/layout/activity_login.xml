@@ -21,8 +21,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
-
-        android:text="admin"
         android:hint="用户名"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
@@ -35,8 +33,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:text="admin"
-
         android:hint="密码"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
