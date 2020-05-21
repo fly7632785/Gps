@@ -128,6 +128,7 @@ public class KeepLiveService extends AbsWorkService {
     public void stopWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "stopWork");
         stopService();
+        mLocationClient.onDestroy();
     }
 
     @Override

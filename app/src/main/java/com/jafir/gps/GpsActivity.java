@@ -8,6 +8,7 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.xdandroid.hellodaemon.AbsWorkService;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
@@ -47,8 +48,10 @@ public class GpsActivity extends FrameActivity {
 
 
     @OnClick(R.id.logout)
-    public void logout(){
+    public void logout() {
         PrefManager.getInstance(this).setUserId("");
+        KeepLiveService.stopService();
+        AbsWorkService.cancelJobAlarmSub();
         finish();
     }
 
