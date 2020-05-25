@@ -52,6 +52,7 @@ public class GpsActivity extends FrameActivity {
         PrefManager.getInstance(this).setUserId("");
         KeepLiveService.stopService();
         AbsWorkService.cancelJobAlarmSub();
+        stopService(new Intent(this, KeepLiveService.class));
         finish();
     }
 
@@ -59,28 +60,36 @@ public class GpsActivity extends FrameActivity {
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
-        mMapView.onDestroy();
+        if (mMapView != null) {
+            mMapView.onDestroy();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-        mMapView.onResume();
+        if (mMapView != null) {
+            mMapView.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
-        mMapView.onPause();
+        if (mMapView != null) {
+            mMapView.onPause();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
-        mMapView.onSaveInstanceState(outState);
+        if (mMapView != null) {
+            mMapView.onSaveInstanceState(outState);
+        }
     }
 
     @Override

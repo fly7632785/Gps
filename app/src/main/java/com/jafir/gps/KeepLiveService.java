@@ -2,6 +2,7 @@ package com.jafir.gps;
 
 import android.content.Intent;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.amap.api.location.AMapLocationClient;
@@ -58,8 +59,11 @@ public class KeepLiveService extends AbsWorkService {
     };
 
     private void upload(double longitude, double latitude) {
-        shouldCount++;
         String userId = PrefManager.getInstance(this).userId();
+        if (TextUtils.isEmpty(userId)) {
+            return;
+        }
+        shouldCount++;
         RetrofitManager.getInstance()
                 .mainService()
                 .gps(userId, longitude, latitude)
@@ -118,17 +122,30 @@ public class KeepLiveService extends AbsWorkService {
     @Override
     public void startWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "startWork");
-        if (!mLocationClient.isStarted()) {
-            Log.i(TAG, "startLocation");
-            mLocationClient.startLocation();
+        String userId = PrefManager.getInstance(this).userId();
+        if (!TextUtils.isEmpty(userId)) {
+            if (mLocationClient != null && !mLocationClient.isStarted()) {
+                Log.i(TAG, "startLocation");
+                mLocationClient.startLocation();
+            } else if (mLocationClient == null) {
+                initGps();
+            }
+        } else {
+            if (mLocationClient != null) {
+                mLocationClient.stopLocation();
+            }
         }
+
     }
 
     @Override
     public void stopWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "stopWork");
         stopService();
-        mLocationClient.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();
+            mLocationClient.onDestroy();
+        }
     }
 
     @Override
