@@ -8,6 +8,7 @@ import android.util.Log;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.google.gson.Gson;
 import com.xdandroid.hellodaemon.AbsWorkService;
 
 import java.text.SimpleDateFormat;
@@ -64,12 +65,19 @@ public class KeepLiveService extends AbsWorkService {
             return;
         }
         shouldCount++;
+        RequestModel requestModel = new RequestModel();
+        requestModel.setUserId(DeviceUtil.getDeviceId(getApplicationContext()));
+        requestModel.setData(new RequestModel.DataBean(String.valueOf(latitude), String.valueOf(longitude)));
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(userId, longitude, latitude)
+                .gps(new Gson().toJson(requestModel))
+                .onErrorReturnItem(new ResultModel("10000"))
                 .compose(ReactivexCompat.singleThreadSchedule())
-                .subscribe(responseBody -> {
-                    Log.d(TAG, "service upload success:" + responseBody.string());
+                .subscribe(result -> {
+                    Long interval = Long.valueOf(result.getUploadSpace());
+                    mLocationOption.setInterval(interval);
+                    mLocationClient.setLocationOption(mLocationOption);
+                    Log.d(TAG, "service upload success:" + new Gson().toJson(result));
                     actualCount++;
                 }, e -> {
                     Log.e(TAG, "service upload err:" + e.getMessage());

@@ -43,7 +43,7 @@ public class RetrofitManager {
 
 
         return new Retrofit.Builder()
-                .baseUrl("http://fast.zhangwei.fun/")
+                .baseUrl("http://xxxxx/")
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(builder.build())

@@ -4,11 +4,11 @@ apply plugin: 'com.jakewharton.butterknife'
 android {
     def globalConfig = rootProject.extensions.getByName('ext')
 
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.jafir.gps"
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
