@@ -60,13 +60,14 @@ public class KeepLiveService extends AbsWorkService {
 
     private void upload(double longitude, double latitude) {
         String userId = PrefManager.getInstance(this).userId();
+        String token = PrefManager.getInstance(this).getToken();
         if (TextUtils.isEmpty(userId)) {
             return;
         }
         shouldCount++;
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(userId, longitude, latitude)
+                .gps(userId,token, longitude, latitude)
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(responseBody -> {
                     Log.d(TAG, "service upload success:" + responseBody.string());

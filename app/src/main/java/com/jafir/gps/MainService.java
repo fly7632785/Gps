@@ -4,6 +4,7 @@ import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -16,5 +17,5 @@ public interface MainService {
 
     @POST("/train/gps.html")
     @FormUrlEncoded
-    Single<ResponseBody> gps(@Field("user_id") String userId,@Field("lng") double lng,@Field("lat") double lat);
+    Single<ResponseBody> gps(@Field("user_id") String userId, @Header("token") String token, @Field("lng") double lng, @Field("lat") double lat);
 }

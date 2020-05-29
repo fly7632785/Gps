@@ -71,6 +71,7 @@ public class LoginActivity extends FrameActivity {
                 .subscribe(loginResult -> {
                     if (loginResult.getCode() == 200) {
                         PrefManager.getInstance(LoginActivity.this).setUserId(String.valueOf(loginResult.getData().getUser_id()));
+                        PrefManager.getInstance(LoginActivity.this).setToken(String.valueOf(loginResult.getData().getToken()));
                         startActivity(new Intent(LoginActivity.this, GpsActivity.class));
                         finish();
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();

@@ -47,6 +47,15 @@ public class LoginResult {
 
         private int user_id;
         private String nickname;
+        private String token;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
 
         public int getUser_id() {
             return user_id;
