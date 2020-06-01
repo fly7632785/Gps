@@ -10,11 +10,11 @@
         android:layout_height="match_parent"/>
 
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/mock_gps"
         android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"
-        android:text="退出登录"/>
+        android:text="模拟选点位置"/>
 </RelativeLayout>

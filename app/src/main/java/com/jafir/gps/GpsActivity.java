@@ -2,14 +2,18 @@ package com.jafir.gps;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.jafir.gps.mocklocation.LocationActivity;
 import com.xdandroid.hellodaemon.AbsWorkService;
-import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,6 +26,8 @@ public class GpsActivity extends FrameActivity {
     private static final String TAG = "GpsActivity";
     @BindView(R.id.map)
     MapView mMapView;
+    private double mMockLat, mMockLng;
+    private Marker mMarker;
 
 
     @Override
@@ -44,10 +50,32 @@ public class GpsActivity extends FrameActivity {
         map.getUiSettings().setMyLocationButtonEnabled(true); //显示默认的定位按钮
         map.setMyLocationEnabled(true);// 可触发定位并显示当前位置
         map.moveCamera(CameraUpdateFactory.zoomTo(16));
+        map.setOnMapClickListener(latLng -> {
+            Log.d(TAG, "mapCLick:" + latLng.latitude + "\t" + latLng.longitude);
+            mMockLat = latLng.latitude;
+            mMockLng = latLng.longitude;
+            if (mMarker != null) {
+                mMarker.remove();
+            }
+            mMarker = map.addMarker(new MarkerOptions().position(latLng).title("模拟位置").snippet("default"));
+        });
     }
 
 
-    @OnClick(R.id.logout)
+    @OnClick(R.id.mock_gps)
+    public void mockGps() {
+        double lat = mMockLat;
+        double lng = mMockLng;
+        if (mMockLat == 0 || mMockLng == 0) {
+            Toast.makeText(this, "请先在地图上选点", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, LocationActivity.class);
+        intent.putExtra(LocationActivity.INTENT_KEY_LAT, lat);
+        intent.putExtra(LocationActivity.INTENT_KEY_LNG, lng);
+        startActivity(intent);
+    }
+
     public void logout() {
         PrefManager.getInstance(this).setUserId("");
         KeepLiveService.stopService();
@@ -90,11 +118,5 @@ public class GpsActivity extends FrameActivity {
         if (mMapView != null) {
             mMapView.onSaveInstanceState(outState);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        IntentWrapper.onBackPressed(this);
-//        moveTaskToBack(true);
     }
 }

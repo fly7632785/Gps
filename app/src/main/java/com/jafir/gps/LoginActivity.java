@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
+import butterknife.OnClick;
+
 /**
  * created by jafir on 2020-05-20
  */
@@ -35,6 +37,22 @@ public class LoginActivity extends FrameActivity {
                     }
                 }, e -> {
                 });
+        PrefManager.getInstance(this).setUserId(DeviceUtil.getDeviceId(this));
+
         startService(new Intent(this, KeepLiveService.class));
+
     }
+
+    @OnClick(R.id.mock_gps)
+    public void mockGps() {
+        startActivity(new Intent(this,GpsActivity.class));
+//        startActivity(new Intent(this, LocationActivity.class));
+//        startService(new Intent(this,MockGpsService.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        IntentWrapper.onBackPressed(this);
+    }
+
 }

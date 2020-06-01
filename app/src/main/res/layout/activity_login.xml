@@ -5,4 +5,10 @@
     android:gravity="center_horizontal"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <Button
+        android:id="@+id/mock_gps"
+        android:layout_width="wrap_content"
+        android:text="模拟定位"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

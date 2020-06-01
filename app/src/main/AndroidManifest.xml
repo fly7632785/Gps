@@ -13,18 +13,22 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".LoginActivity"
-            android:excludeFromRecents="true">
+            android:name=".LoginActivity">
+<!--            android:excludeFromRecents="true">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!--                隐藏图标-->
-                <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+                                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".GpsActivity"
-            android:excludeFromRecents="true" />
+            />
+        <!--            android:excludeFromRecents="true">-->
+        <activity android:name=".mocklocation.LocationActivity"/>
+        <activity android:name=".mocklocation.LocationDialogDemo"/>
+        <service android:name=".MockGpsService"/>
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1d18b15cd5a26ef9ac615fb28145b765" />
@@ -49,5 +53,8 @@
     <!--用于申请调用A-GPS模块-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

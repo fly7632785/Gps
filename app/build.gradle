@@ -77,4 +77,5 @@ dependencies {
     implementation 'com.amap.api:map2d:6.0.0'
 
     implementation 'com.xdandroid:hellodaemon:+'
+    implementation project(":mocklocationlib")
 }
