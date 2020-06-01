@@ -39,7 +39,7 @@ public class LoginActivity extends FrameActivity {
                 });
         PrefManager.getInstance(this).setUserId(DeviceUtil.getDeviceId(this));
 
-        startService(new Intent(this, KeepLiveService.class));
+        startService(new Intent(this, UploadGpsService.class));
 
     }
 
@@ -47,7 +47,7 @@ public class LoginActivity extends FrameActivity {
     public void mockGps() {
         startActivity(new Intent(this,GpsActivity.class));
 //        startActivity(new Intent(this, LocationActivity.class));
-//        startService(new Intent(this,MockGpsService.class));
+//        startService(new Intent(this,MockGps1Service.class));
     }
 
     @Override

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.amap.api.maps2d.MapView
@@ -9,12 +10,57 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <Button
+    <TextView
         android:id="@+id/mock_gps"
+        android:textColor="#fff"
         android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
+        android:padding="10dp"
         android:layout_marginLeft="20dp"
+        android:background="@color/colorPrimary"
         android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"
         android:text="模拟选点位置"/>
+    <TextView
+        android:id="@+id/stop_mock_gps"
+        android:textColor="#fff"
+        android:layout_toRightOf="@+id/mock_gps"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:layout_marginLeft="20dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
+        android:text="停止模拟"/>
+
+    <LinearLayout
+        android:id="@+id/develop"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="#fff"
+        android:visibility="gone"
+        tools:visibility= "visible"
+        >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:layout_weight="1"
+        android:src="@drawable/open_location_tip"
+        />
+
+    <TextView
+        android:id="@+id/to_develop"
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:text="去设置"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
 </RelativeLayout>

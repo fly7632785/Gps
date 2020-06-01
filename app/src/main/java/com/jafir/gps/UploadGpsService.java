@@ -15,16 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import androidx.annotation.Nullable;
-import io.reactivex.disposables.Disposable;
 
 /**
  * created by jafir on 2020-05-20
  */
-public class KeepLiveService extends AbsWorkService {
-    private static final String TAG = KeepLiveService.class.getSimpleName();
+public class UploadGpsService extends AbsWorkService {
+    private static final String TAG = UploadGpsService.class.getSimpleName();
     //是否 任务完成, 不再需要服务运行?
     public static boolean sShouldStopService;
-    public static Disposable sDisposable;
 
     int shouldCount;
     int actualCount;
@@ -159,7 +157,7 @@ public class KeepLiveService extends AbsWorkService {
     @Override
     public Boolean isWorkRunning(Intent intent, int flags, int startId) {
         //若还没有取消订阅, 就说明任务仍在运行.
-        return sDisposable != null && !sDisposable.isDisposed();
+        return false;
     }
 
     @Nullable

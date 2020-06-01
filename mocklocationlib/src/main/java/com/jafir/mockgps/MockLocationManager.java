@@ -21,6 +21,7 @@ public class MockLocationManager {
      * 位置管理器
      */
     public LocationManager locationManager = null;
+    private Context mContext;
 
     public LocationManager getLocationManager() {
         return locationManager;
@@ -61,6 +62,7 @@ public class MockLocationManager {
      * @param context
      */
     public void initService(Context context) {
+        mContext = context;
         /**
          * 模拟位置服务
          */
@@ -160,7 +162,7 @@ public class MockLocationManager {
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
 
                     if (hasAddTestProvider == false) {
                         continue;

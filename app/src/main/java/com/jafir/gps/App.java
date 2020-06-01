@@ -18,7 +18,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         startAlarm();
-        DaemonEnv.initialize(this, KeepLiveService.class, 3 * 60 * 1000);
+        DaemonEnv.initialize(this, UploadGpsService.class, 3 * 60 * 1000);
     }
 
     public void startAlarm() {

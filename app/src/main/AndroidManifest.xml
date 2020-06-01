@@ -28,13 +28,14 @@
         <!--            android:excludeFromRecents="true">-->
         <activity android:name=".mocklocation.LocationActivity"/>
         <activity android:name=".mocklocation.LocationDialogDemo"/>
+        <service android:name=".MockGps1Service"/>
         <service android:name=".MockGpsService"/>
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1d18b15cd5a26ef9ac615fb28145b765" />
 
         <service android:name="com.amap.api.location.APSService"></service>
-        <service android:name=".KeepLiveService" />
+        <service android:name=".UploadGpsService" />
     </application>
     <!--用于访问GPS定位-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
