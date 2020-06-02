@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.service;
 
 import android.content.Intent;
 import android.os.IBinder;
@@ -9,6 +9,12 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
+import com.jafir.gps.util.PrefManager;
+import com.jafir.gps.util.ReactivexCompat;
+import com.jafir.gps.util.RetrofitManager;
+import com.jafir.gps.model.RequestModel;
+import com.jafir.gps.model.ResultModel;
+import com.jafir.gps.util.DeviceUtil;
 import com.xdandroid.hellodaemon.AbsWorkService;
 
 import java.text.SimpleDateFormat;

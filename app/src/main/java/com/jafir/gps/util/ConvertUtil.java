@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
 
 import com.amap.api.maps2d.model.LatLng;
 

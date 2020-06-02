@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;

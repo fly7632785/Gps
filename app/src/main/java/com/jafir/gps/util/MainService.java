@@ -1,4 +1,6 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
+
+import com.jafir.gps.model.ResultModel;
 
 import io.reactivex.Single;
 import retrofit2.http.Body;

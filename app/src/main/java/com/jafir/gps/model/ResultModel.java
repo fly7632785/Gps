@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.model;
 
 /**
  * created by jafir on 2020-05-28

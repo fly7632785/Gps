@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

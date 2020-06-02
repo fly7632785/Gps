@@ -1,8 +1,9 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
 
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.jafir.gps.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
 

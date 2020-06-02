@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.amap.api.location.APSService;
+import com.jafir.gps.service.UploadGpsService;
 import com.xdandroid.hellodaemon.DaemonEnv;
 
 /**

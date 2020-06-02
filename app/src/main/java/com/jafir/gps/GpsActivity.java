@@ -15,9 +15,13 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.jafir.gps.mocklocation.LocationActivity;
+import com.jafir.gps.service.MockGpsService;
+import com.jafir.gps.service.UploadGpsService;
+import com.jafir.gps.util.ConvertUtil;
+import com.jafir.gps.util.PrefManager;
 import com.jafir.mockgps.MockLocationManager;
 import com.xdandroid.hellodaemon.AbsWorkService;
+import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -98,6 +102,7 @@ public class GpsActivity extends FrameActivity {
     public void StopMockGps() {
         MockGpsService.stopService();
         stopService(new Intent(this, MockGpsService.class));
+        finish();
     }
 
     @OnClick(R.id.mock_gps)
@@ -175,4 +180,10 @@ public class GpsActivity extends FrameActivity {
             mMapView.onSaveInstanceState(outState);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        IntentWrapper.onBackPressed(this);
+    }
+
 }

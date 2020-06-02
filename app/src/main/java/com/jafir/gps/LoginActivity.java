@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.jafir.gps.service.UploadGpsService;
+import com.jafir.gps.util.DeviceUtil;
+import com.jafir.gps.util.PrefManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xdandroid.hellodaemon.IntentWrapper;
 

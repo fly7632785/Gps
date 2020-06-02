@@ -1,9 +1,8 @@
-package com.jafir.gps.mocklocation;
+package com.jafir.gps;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.jafir.gps.R;
 import com.jafir.mockgps.LocationBean;
 import com.jafir.mockgps.LocationWidget;
 

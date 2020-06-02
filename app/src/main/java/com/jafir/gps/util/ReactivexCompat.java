@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.util;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

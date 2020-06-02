@@ -1,4 +1,4 @@
-package com.jafir.gps;
+package com.jafir.gps.service;
 
 import android.content.Intent;
 import android.os.IBinder;
