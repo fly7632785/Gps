@@ -20,19 +20,6 @@ public class MockGpsService extends AbsWorkService {
     public static  boolean sShouldStopService;
     private MockLocationManager mMockLocationManager;
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sShouldStopService = false;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        sShouldStopService = false;
-        return super.onStartCommand(intent, flags, startId);
-    }
-
     public static void stopService() {
         //我们现在不再需要服务运行了, 将标志位置为 true
         sShouldStopService = true;
@@ -86,13 +73,12 @@ public class MockGpsService extends AbsWorkService {
     public void stopWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "stopWork");
         stopMockLocation();
-        stopService();
     }
 
     @Override
     public Boolean isWorkRunning(Intent intent, int flags, int startId) {
         //若还没有取消订阅, 就说明任务仍在运行.
-        return false;
+        return null;
     }
 
     @Nullable

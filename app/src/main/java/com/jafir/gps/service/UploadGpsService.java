@@ -163,7 +163,7 @@ public class UploadGpsService extends AbsWorkService {
     @Override
     public Boolean isWorkRunning(Intent intent, int flags, int startId) {
         //若还没有取消订阅, 就说明任务仍在运行.
-        return false;
+        return null;
     }
 
     @Nullable

@@ -21,6 +21,7 @@ import com.jafir.gps.util.ConvertUtil;
 import com.jafir.gps.util.PrefManager;
 import com.jafir.mockgps.MockLocationManager;
 import com.xdandroid.hellodaemon.AbsWorkService;
+import com.xdandroid.hellodaemon.DaemonEnv;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
@@ -121,6 +122,7 @@ public class GpsActivity extends FrameActivity {
 //        startActivity(intent);
 
 
+        MockGpsService.sShouldStopService = false;
         Intent intent = new Intent(this, MockGpsService.class);
         intent.putExtra(LocationActivity.INTENT_KEY_LAT, lat);
         intent.putExtra(LocationActivity.INTENT_KEY_LNG, lng);
@@ -134,13 +136,6 @@ public class GpsActivity extends FrameActivity {
 
     }
 
-    public void logout() {
-        PrefManager.getInstance(this).setUserId("");
-        AbsWorkService.cancelJobAlarmSub();
-        UploadGpsService.stopService();
-        stopService(new Intent(this, UploadGpsService.class));
-        finish();
-    }
 
     @Override
     protected void onDestroy() {

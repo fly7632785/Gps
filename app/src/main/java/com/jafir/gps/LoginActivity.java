@@ -8,6 +8,7 @@ import com.jafir.gps.service.UploadGpsService;
 import com.jafir.gps.util.DeviceUtil;
 import com.jafir.gps.util.PrefManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xdandroid.hellodaemon.DaemonEnv;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.OnClick;
@@ -42,8 +43,8 @@ public class LoginActivity extends FrameActivity {
                 });
         PrefManager.getInstance(this).setUserId(DeviceUtil.getDeviceId(this));
 
-        startService(new Intent(this, UploadGpsService.class));
-
+        UploadGpsService.sShouldStopService = false;
+        DaemonEnv.startServiceMayBind(UploadGpsService.class);
     }
 
     @OnClick(R.id.mock_gps)
@@ -51,6 +52,14 @@ public class LoginActivity extends FrameActivity {
         startActivity(new Intent(this,GpsActivity.class));
 //        startActivity(new Intent(this, LocationActivity.class));
 //        startService(new Intent(this,MockGps1Service.class));
+    }
+
+
+    public void logout() {
+        PrefManager.getInstance(this).setUserId("");
+        UploadGpsService.stopService();
+        stopService(new Intent(this, UploadGpsService.class));
+        finish();
     }
 
     @Override

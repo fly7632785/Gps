@@ -194,8 +194,7 @@ public class MockLocationManager {
 
     public Location generateLocation(double lat, double lng) {
         Location loc = new Location("gps");
-        Log.d(TAG, "mock getLatitude:" + lat);
-        Log.d(TAG, "mock getLongitude:" + lng);
+        Log.d(TAG, "mock latitude:" + lat + "\tlongitude:" + lng);
 
         loc.setAccuracy(2.0F);
         loc.setAltitude(55.0D);
@@ -204,17 +203,12 @@ public class MockLocationManager {
         bundle.putInt("satellites", 7);
         loc.setExtras(bundle);
 
-
         loc.setLatitude(lat);
         loc.setLongitude(lng);
-//        loc.setAccuracy(1.0F);
-//        loc.setAltitude(10);
-//        loc.setBearing(90);
         loc.setTime(System.currentTimeMillis());
         if (Build.VERSION.SDK_INT >= 17) {
             loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
         }
-//        Log.d("WATCH",loc.toString());
         return loc;
     }
 
