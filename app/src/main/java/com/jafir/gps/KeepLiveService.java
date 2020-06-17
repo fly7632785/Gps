@@ -2,7 +2,6 @@ package com.jafir.gps;
 
 import android.content.Intent;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.amap.api.location.AMapLocationClient;
@@ -59,15 +58,11 @@ public class KeepLiveService extends AbsWorkService {
     };
 
     private void upload(double longitude, double latitude) {
-        String userId = PrefManager.getInstance(this).userId();
-        String token = PrefManager.getInstance(this).getToken();
-        if (TextUtils.isEmpty(userId)) {
-            return;
-        }
         shouldCount++;
+        String ime = DeviceUtil.getDeviceId(getApplicationContext());
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(userId,token, longitude, latitude)
+                .gps(ime, longitude, latitude)
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(responseBody -> {
                     Log.d(TAG, "service upload success:" + responseBody.string());
@@ -123,18 +118,11 @@ public class KeepLiveService extends AbsWorkService {
     @Override
     public void startWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "startWork");
-        String userId = PrefManager.getInstance(this).userId();
-        if (!TextUtils.isEmpty(userId)) {
-            if (mLocationClient != null && !mLocationClient.isStarted()) {
-                Log.i(TAG, "startLocation");
-                mLocationClient.startLocation();
-            } else if (mLocationClient == null) {
-                initGps();
-            }
-        } else {
-            if (mLocationClient != null) {
-                mLocationClient.stopLocation();
-            }
+        if (mLocationClient != null && !mLocationClient.isStarted()) {
+            Log.i(TAG, "startLocation");
+            mLocationClient.startLocation();
+        } else if (mLocationClient == null) {
+            initGps();
         }
 
     }

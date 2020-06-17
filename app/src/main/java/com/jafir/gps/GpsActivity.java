@@ -1,18 +1,21 @@
 package com.jafir.gps;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xdandroid.hellodaemon.AbsWorkService;
+import com.xdandroid.hellodaemon.DaemonEnv;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * created by jafir on 2020-05-20
@@ -23,15 +26,39 @@ public class GpsActivity extends FrameActivity {
     @BindView(R.id.map)
     MapView mMapView;
 
+    @BindView(R.id.ime)
+    Button mIme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+
+        if (PrefManager.getInstance(this).isFirst()) {
+            IntentWrapper.whiteListMatters(this, "为了更好的实时定位，最好把应用加入您手机的白名单");
+            PrefManager.getInstance(this).setFirst();
+        }
+
+        new RxPermissions(this)
+                .request(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)
+                .as(bindLifecycle())
+                .subscribe(b -> {
+                    if (!b) {
+                        finish();
+                    }else {
+                        KeepLiveService.sShouldStopService = false;
+                        DaemonEnv.startServiceMayBind(KeepLiveService.class);
+                        initMap();
+                        mIme.setText("imei:"+DeviceUtil.getDeviceId(this));
+                    }
+                }, e -> {
+                });
         mMapView.onCreate(savedInstanceState);
-        startService(new Intent(this, KeepLiveService.class));
-        initMap();
     }
 
     private void initMap() {
@@ -47,9 +74,8 @@ public class GpsActivity extends FrameActivity {
     }
 
 
-    @OnClick(R.id.logout)
+    @Deprecated
     public void logout() {
-        PrefManager.getInstance(this).setUserId("");
         KeepLiveService.stopService();
         AbsWorkService.cancelJobAlarmSub();
         stopService(new Intent(this, KeepLiveService.class));

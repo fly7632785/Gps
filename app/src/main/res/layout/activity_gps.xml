@@ -10,11 +10,12 @@
         android:layout_height="match_parent"/>
 
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/ime"
         android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
         android:layout_height="wrap_content"
-        android:text="退出登录"/>
+        android:text="ime"/>
+
 </RelativeLayout>
