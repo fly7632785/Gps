@@ -1,9 +1,14 @@
 package com.jafir.gps.util;
 
-import com.jafir.gps.model.ResultModel;
+import com.jafir.gps.model.LoginResult;
+import com.jafir.gps.model.RequestModel;
 
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -11,6 +16,11 @@ import retrofit2.http.POST;
  */
 public interface MainService {
 
-    @POST("/train")
-    Single<ResultModel> gps(@Body String gson);
+    @POST("/login")
+    @FormUrlEncoded
+    Single<LoginResult> login(@Field("username") String username, @Field("password") String password);
+
+
+    @POST("/gps")
+    Single<ResponseBody> gps(@Header ("token")String token, @Body RequestModel model);
 }

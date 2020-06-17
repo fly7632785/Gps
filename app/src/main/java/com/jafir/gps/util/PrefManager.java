@@ -43,4 +43,11 @@ public class PrefManager {
     public void setUserId(String userId) {
         sharedPreferences.edit().putString("userId", userId).apply();
     }
+
+    public void setToken(String valueOf) {
+        sharedPreferences.edit().putString("token", valueOf).apply();
+    }
+    public String getToken() {
+        return sharedPreferences.getString("token", "");
+    }
 }

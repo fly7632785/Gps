@@ -5,58 +5,31 @@ package com.jafir.gps.model;
  */
 public class RequestModel
 {
-    /**
-     * userId : 3593332170201113
-     * data : {"lat":"","lng":""}
-     */
+    private Double lat;
+    private Double lng;
+    private Long time;
 
-    private String userId;
-    private DataBean data;
-
-    public String getUserId() {
-        return userId;
+    public Double getLat() {
+        return lat;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
-    public DataBean getData() {
-        return data;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
-    public static class DataBean {
-        /**
-         * lat :
-         * lng :
-         */
+    public Long getTime() {
+        return time;
+    }
 
-        private String lat;
-        private String lng;
-
-        public DataBean(String lat, String lng) {
-            this.lat = lat;
-            this.lng = lng;
-        }
-
-        public String getLat() {
-            return lat;
-        }
-
-        public void setLat(String lat) {
-            this.lat = lat;
-        }
-
-        public String getLng() {
-            return lng;
-        }
-
-        public void setLng(String lng) {
-            this.lng = lng;
-        }
+    public void setTime(Long time) {
+        this.time = time;
     }
 }

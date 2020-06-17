@@ -9,12 +9,10 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
+import com.jafir.gps.model.RequestModel;
 import com.jafir.gps.util.PrefManager;
 import com.jafir.gps.util.ReactivexCompat;
 import com.jafir.gps.util.RetrofitManager;
-import com.jafir.gps.model.RequestModel;
-import com.jafir.gps.model.ResultModel;
-import com.jafir.gps.util.DeviceUtil;
 import com.xdandroid.hellodaemon.AbsWorkService;
 
 import java.text.SimpleDateFormat;
@@ -65,22 +63,20 @@ public class UploadGpsService extends AbsWorkService {
 
     private void upload(double longitude, double latitude) {
         String userId = PrefManager.getInstance(this).userId();
+        String token = PrefManager.getInstance(this).getToken();
         if (TextUtils.isEmpty(userId)) {
             return;
         }
         shouldCount++;
         RequestModel requestModel = new RequestModel();
-        requestModel.setUserId(DeviceUtil.getDeviceId(getApplicationContext()));
-        requestModel.setData(new RequestModel.DataBean(String.valueOf(latitude), String.valueOf(longitude)));
+        requestModel.setTime(System.currentTimeMillis()/1000);
+        requestModel.setLat(latitude);
+        requestModel.setLng(longitude);
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(new Gson().toJson(requestModel))
-                .onErrorReturnItem(new ResultModel("10000"))
+                .gps(token,requestModel)
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(result -> {
-                    Long interval = Long.valueOf(result.getUploadSpace());
-                    mLocationOption.setInterval(interval);
-                    mLocationClient.setLocationOption(mLocationOption);
                     Log.d(TAG, "service upload success:" + new Gson().toJson(result));
                     actualCount++;
                 }, e -> {

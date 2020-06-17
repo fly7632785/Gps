@@ -40,28 +40,24 @@ public class LoginResult {
     }
 
     public static class DataBean {
-        /**
-         * user_id : 1
-         * nickname : 手持1
-         */
 
-        private int user_id;
-        private String nickname;
+        private int uid;
+        private String token;
 
-        public int getUser_id() {
-            return user_id;
+        public int getUid() {
+            return uid;
         }
 
-        public void setUser_id(int user_id) {
-            this.user_id = user_id;
+        public void setUid(int uid) {
+            this.uid = uid;
         }
 
-        public String getNickname() {
-            return nickname;
+        public String getToken() {
+            return token;
         }
 
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
+        public void setToken(String token) {
+            this.token = token;
         }
     }
 }
