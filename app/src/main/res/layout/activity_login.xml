@@ -6,49 +6,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
+
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/logo"
+        android:layout_height="150dp"/>
+
+    <TextView
+        android:id="@+id/imei"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:layout_marginTop="100dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:title="登录"
-        app:titleTextColor="#fff" />
-
-
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="24dp"
-        android:hint="用户名"
-        android:inputType="textEmailAddress"
-        android:selectAllOnFocus="true"
-        />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="密码"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        />
-
+        android:text="imei"/>
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="48dp"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
         android:layout_marginBottom="64dp"
         android:text="登录"
         />
+    <Space
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:text="上海邀月管线技术工程有限公司"/>
 
 </LinearLayout>

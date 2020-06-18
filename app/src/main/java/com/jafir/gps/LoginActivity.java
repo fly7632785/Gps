@@ -3,10 +3,9 @@ package com.jafir.gps;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -21,10 +20,8 @@ import butterknife.OnClick;
 public class LoginActivity extends FrameActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
-    @BindView(R.id.username)
-    EditText mUserName;
-    @BindView(R.id.password)
-    EditText mPassword;
+    @BindView(R.id.imei)
+    TextView mImei;
     @BindView(R.id.login)
     View mLogin;
 
@@ -51,37 +48,26 @@ public class LoginActivity extends FrameActivity {
                     }
                 }, e -> {
                 });
-
-        if (!TextUtils.isEmpty(PrefManager.getInstance(this).userId())) {
-            Toast.makeText(LoginActivity.this, "已登录", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(LoginActivity.this, GpsActivity.class));
-            finish();
-        }
+        mImei.setText("imei:" + DeviceUtil.getDeviceId(this));
     }
 
     @OnClick(R.id.login)
     public void login() {
-        String username = mUserName.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
         RetrofitManager.getInstance()
                 .mainService()
-                .login(username, password)
+                .login(DeviceUtil.getDeviceId(this))
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .as(bindLifecycle())
                 .subscribe(loginResult -> {
                     if (loginResult.getCode() == 200) {
-                        PrefManager.getInstance(LoginActivity.this).setUserId(String.valueOf(loginResult.getData().getUser_id()));
-                        PrefManager.getInstance(LoginActivity.this).setToken(String.valueOf(loginResult.getData().getToken()));
                         startActivity(new Intent(LoginActivity.this, GpsActivity.class));
                         finish();
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     } else {
-                        PrefManager.getInstance(LoginActivity.this).setUserId("");
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> {
                     Log.e(TAG, "login err:" + throwable);
-                    PrefManager.getInstance(LoginActivity.this).setUserId("");
                     Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                 });
     }

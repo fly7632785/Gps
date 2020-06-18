@@ -12,7 +12,7 @@ import retrofit2.http.POST;
 public interface MainService {
     @POST("/train/login.html")
     @FormUrlEncoded
-    Single<LoginResult> login(@Field("username") String username, @Field("password") String password);
+    Single<LoginResult> login(@Field("iemi") String imei);
 
     @POST("/train/gps.html")
     @FormUrlEncoded

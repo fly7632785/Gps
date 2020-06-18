@@ -1,6 +1,5 @@
 package com.jafir.gps;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -10,7 +9,6 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xdandroid.hellodaemon.AbsWorkService;
 import com.xdandroid.hellodaemon.DaemonEnv;
 import com.xdandroid.hellodaemon.IntentWrapper;
@@ -35,29 +33,10 @@ public class GpsActivity extends FrameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
-        if (PrefManager.getInstance(this).isFirst()) {
-            IntentWrapper.whiteListMatters(this, "为了更好的实时定位，最好把应用加入您手机的白名单");
-            PrefManager.getInstance(this).setFirst();
-        }
-
-        new RxPermissions(this)
-                .request(Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE)
-                .as(bindLifecycle())
-                .subscribe(b -> {
-                    if (!b) {
-                        finish();
-                    }else {
-                        KeepLiveService.sShouldStopService = false;
-                        DaemonEnv.startServiceMayBind(KeepLiveService.class);
-                        initMap();
-                        mIme.setText("imei:"+DeviceUtil.getDeviceId(this));
-                    }
-                }, e -> {
-                });
+        KeepLiveService.sShouldStopService = false;
+        DaemonEnv.startServiceMayBind(KeepLiveService.class);
+        initMap();
+        mIme.setText("imei:" + DeviceUtil.getDeviceId(this));
         mMapView.onCreate(savedInstanceState);
     }
 
