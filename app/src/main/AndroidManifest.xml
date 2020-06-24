@@ -18,13 +18,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!--                隐藏图标-->
-                <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".GpsActivity"
             android:excludeFromRecents="true" />
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1d18b15cd5a26ef9ac615fb28145b765" />

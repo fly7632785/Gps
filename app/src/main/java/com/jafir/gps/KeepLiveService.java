@@ -2,12 +2,13 @@ package com.jafir.gps;
 
 import android.content.Intent;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.model.LatLng;
 import com.google.gson.Gson;
 import com.xdandroid.hellodaemon.AbsWorkService;
 
@@ -60,27 +61,45 @@ public class KeepLiveService extends AbsWorkService {
     };
 
     private void upload(double longitude, double latitude) {
-        String userId = PrefManager.getInstance(this).userId();
-        if (TextUtils.isEmpty(userId)) {
-            return;
-        }
+
+        LatLng latLng = ConvertUtil.toWGS84Point(latitude, longitude);
+
         shouldCount++;
-        RequestModel requestModel = new RequestModel();
-        requestModel.setUserId(DeviceUtil.getDeviceId(getApplicationContext()));
-        requestModel.setData(new RequestModel.DataBean(String.valueOf(latitude), String.valueOf(longitude)));
+        GpsRequestModel requestModel = new GpsRequestModel();
+        requestModel.setImei(DeviceUtil.getDeviceId(getApplicationContext()));
+        requestModel.setData(new GpsRequestModel.DataBean(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude)));
+        String token = PrefManager.getInstance(getApplicationContext()).getToken();
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(new Gson().toJson(requestModel))
-                .onErrorReturnItem(new ResultModel("10000"))
+                .gps(token, requestModel)
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(result -> {
-                    Long interval = Long.valueOf(result.getUploadSpace());
-                    mLocationOption.setInterval(interval);
-                    mLocationClient.setLocationOption(mLocationOption);
-                    Log.d(TAG, "service upload success:" + new Gson().toJson(result));
-                    actualCount++;
+                    if (result.getCode() == 0) {
+                        Toast.makeText(getApplicationContext(), "上传成功", Toast.LENGTH_SHORT).show();
+                        Long interval = Long.valueOf(result.getData().getReportFrequency());
+                        long milliseconds = interval * 60 * 1000;
+                        mLocationOption.setInterval(milliseconds);
+                        mLocationClient.setLocationOption(mLocationOption);
+                        Log.d(TAG, "service upload success:" + new Gson().toJson(result));
+                        actualCount++;
+                    } else if (result.getCode() == 401) {
+                        relogin();
+                    }
                 }, e -> {
                     Log.e(TAG, "service upload err:" + e.getMessage());
+                });
+    }
+
+    private void relogin() {
+        RetrofitManager.getInstance().mainService().login(new LoginRequest("admin","123456"))
+                .compose(ReactivexCompat.singleThreadSchedule())
+                .subscribe(result -> {
+                    if (result.getCode() == 0) {
+                        String token = result.getData().getToken();
+                        PrefManager.getInstance(getApplicationContext()).setToken(token);
+                    }
+                }, e -> {
+                    Log.e("login", "service login err:" + e.getMessage());
                 });
     }
 
@@ -130,20 +149,12 @@ public class KeepLiveService extends AbsWorkService {
     @Override
     public void startWork(Intent intent, int flags, int startId) {
         Log.i(TAG, "startWork");
-        String userId = PrefManager.getInstance(this).userId();
-        if (!TextUtils.isEmpty(userId)) {
-            if (mLocationClient != null && !mLocationClient.isStarted()) {
-                Log.i(TAG, "startLocation");
-                mLocationClient.startLocation();
-            } else if (mLocationClient == null) {
-                initGps();
-            }
-        } else {
-            if (mLocationClient != null) {
-                mLocationClient.stopLocation();
-            }
+        if (mLocationClient != null && !mLocationClient.isStarted()) {
+            Log.i(TAG, "startLocation");
+            mLocationClient.startLocation();
+        } else if (mLocationClient == null) {
+            initGps();
         }
-
     }
 
     @Override
