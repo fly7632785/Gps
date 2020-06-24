@@ -73,6 +73,7 @@ public class LoginActivity extends FrameActivity {
                         PrefManager.getInstance(LoginActivity.this).setToken(String.valueOf(loginResult.getData().getToken()));
                         UploadGpsService.sShouldStopService = false;
                         DaemonEnv.startServiceMayBind(UploadGpsService.class);
+                        startActivity(new Intent(this, GpsActivity.class));
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     } else {
                         PrefManager.getInstance(LoginActivity.this).setUserId("");

@@ -44,7 +44,7 @@ public class RetrofitManager {
 
 
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.199.194:9090/")
+                .baseUrl("http://47.108.59.73:9090/")
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(builder.build())
