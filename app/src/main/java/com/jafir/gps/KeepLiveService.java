@@ -17,6 +17,7 @@ import java.util.Date;
 
 import androidx.annotation.Nullable;
 import io.reactivex.disposables.Disposable;
+import retrofit2.HttpException;
 
 /**
  * created by jafir on 2020-05-20
@@ -86,12 +87,17 @@ public class KeepLiveService extends AbsWorkService {
                         relogin();
                     }
                 }, e -> {
+                    if (e instanceof HttpException) {
+                        if (((HttpException) e).code() == 401) {
+                            relogin();
+                        }
+                    }
                     Log.e(TAG, "service upload err:" + e.getMessage());
                 });
     }
 
     private void relogin() {
-        RetrofitManager.getInstance().mainService().login(new LoginRequest("admin","123456"))
+        RetrofitManager.getInstance().mainService().login(new LoginRequest("admin", "123456"))
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(result -> {
                     if (result.getCode() == 0) {
