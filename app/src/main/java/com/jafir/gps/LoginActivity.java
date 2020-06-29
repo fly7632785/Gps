@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jafir.gps.service.UploadGpsService;
@@ -31,6 +32,8 @@ public class LoginActivity extends FrameActivity {
     EditText mPassword;
     @BindView(R.id.login)
     View mLogin;
+    @BindView(R.id.imei)
+    TextView mImei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,12 @@ public class LoginActivity extends FrameActivity {
                 .subscribe(b -> {
                     if (!b) {
                         finish();
+                    }else {
+                        PrefManager.getInstance(this).setUserId(DeviceUtil.getDeviceId(this));
+                        mImei.setText(DeviceUtil.getDeviceId(this));
                     }
                 }, e -> {
                 });
-        PrefManager.getInstance(this).setUserId(DeviceUtil.getDeviceId(this));
     }
 
     @OnClick(R.id.login)

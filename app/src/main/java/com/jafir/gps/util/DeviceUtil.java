@@ -57,6 +57,7 @@ public final class DeviceUtil {
         String uuid = UUID.randomUUID().toString().replace("-", "");
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            Log.d(TAG,"Q");
             Uri externalContentUri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
             ContentResolver contentResolver = context.getContentResolver();
             String[] projection = new String[]{
@@ -68,6 +69,7 @@ public final class DeviceUtil {
             };
             Cursor query = contentResolver.query(externalContentUri, projection, selection, args, null);
             if (query != null && query.moveToFirst()) {
+                Log.d(TAG,"moveToFirst");
                 Uri uri = ContentUris.withAppendedId(externalContentUri, query.getLong(0));
                 query.close();
 
@@ -98,6 +100,7 @@ public final class DeviceUtil {
                     }
                 }
             } else {
+                Log.d(TAG,"ContentValues");
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(MediaStore.Downloads.TITLE, TEMP_FILE_NAME);
                 contentValues.put(MediaStore.Downloads.MIME_TYPE, TEMP_FILE_NAME_MIME_TYPE);
@@ -127,6 +130,7 @@ public final class DeviceUtil {
                 }
             }
         } else {
+            Log.d(TAG,"DIRECTORY_DOWNLOADS");
             File externalDownloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             File applicationFileDir = new File(externalDownloadsDir, TEMP_DIR);
             if (!applicationFileDir.exists()) {
@@ -136,6 +140,7 @@ public final class DeviceUtil {
             }
             File file = new File(applicationFileDir, TEMP_FILE_NAME);
             if (!file.exists()) {
+                Log.d(TAG,"mk DIRECTORY_DOWNLOADS");
                 FileWriter fileWriter = null;
                 try {
                     if (file.createNewFile()) {
@@ -157,6 +162,7 @@ public final class DeviceUtil {
                     }
                 }
             } else {
+                Log.d(TAG,"read DIRECTORY_DOWNLOADS");
                 FileReader fileReader = null;
                 BufferedReader bufferedReader = null;
                 try {

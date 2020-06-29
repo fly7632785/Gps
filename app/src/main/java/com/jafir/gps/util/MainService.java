@@ -2,9 +2,9 @@ package com.jafir.gps.util;
 
 import com.jafir.gps.model.LoginResult;
 import com.jafir.gps.model.RequestModel;
+import com.jafir.gps.model.UploadResult;
 
 import io.reactivex.Single;
-import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -22,5 +22,5 @@ public interface MainService {
 
 
     @POST("/gps")
-    Single<ResponseBody> gps(@Header ("token")String token, @Body RequestModel model);
+    Single<UploadResult> gps(@Header ("token")String token, @Body RequestModel model);
 }

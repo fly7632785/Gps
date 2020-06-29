@@ -64,21 +64,26 @@ public class UploadGpsService extends AbsWorkService {
     private void upload(double longitude, double latitude) {
         String userId = PrefManager.getInstance(this).userId();
         String token = PrefManager.getInstance(this).getToken();
-        if (TextUtils.isEmpty(userId)) {
-            return;
-        }
+//        if (TextUtils.isEmpty(userId)) {
+//            return;
+//        }
         shouldCount++;
         RequestModel requestModel = new RequestModel();
-        requestModel.setTime(System.currentTimeMillis()/1000);
+        requestModel.setTime(System.currentTimeMillis() / 1000);
         requestModel.setLat(latitude);
         requestModel.setLng(longitude);
         RetrofitManager.getInstance()
                 .mainService()
-                .gps(token,requestModel)
+                .gps(token, requestModel)
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(result -> {
-                    Log.d(TAG, "service upload success:" + new Gson().toJson(result));
-                    actualCount++;
+                    if (result.getCode() == 200) {
+                        long interval = result.getData();
+                        mLocationOption.setInterval(interval);
+                        mLocationClient.setLocationOption(mLocationOption);
+                        Log.d(TAG, "service upload success:" + new Gson().toJson(result));
+                        actualCount++;
+                    }
                 }, e -> {
                     Log.e(TAG, "service upload err:" + e.getMessage());
                 });
