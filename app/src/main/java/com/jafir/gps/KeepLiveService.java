@@ -1,9 +1,12 @@
 package com.jafir.gps;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -76,7 +79,7 @@ public class KeepLiveService extends AbsWorkService {
                 .compose(ReactivexCompat.singleThreadSchedule())
                 .subscribe(result -> {
                     if (result.getCode() == 0) {
-                        Toast.makeText(getApplicationContext(), "上传成功", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "上传成功", Toast.LENGTH_SHORT).show();
                         Long interval = Long.valueOf(result.getData().getReportFrequency());
                         long milliseconds = interval * 60 * 1000;
                         mLocationOption.setInterval(milliseconds);
@@ -188,5 +191,37 @@ public class KeepLiveService extends AbsWorkService {
     @Override
     public void onServiceKilled(Intent rootIntent) {
         Log.i(TAG, "onServiceKilled");
+    }
+
+
+    /**
+     * 防止后台2个小时后就休眠
+     */
+    public void startAlarm() {
+        AlarmManager am;
+        Intent intentAlarm;
+        PendingIntent pendSender;
+        //首先获得系统服务
+        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (am == null) return;
+        Log.i(TAG, "startAlarm");
+        //设置闹钟的意图，我这里是去调用一个服务，该服务功能就是获取位置并且上传
+        intentAlarm = new Intent(this, KeepLiveService.class);
+        pendSender = PendingIntent.getService(this, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+//        am.cancel(pendSender);
+        //AlarmManager.RTC_WAKEUP ;这个参数表示系统会唤醒进程；设置的间隔时间是20分钟
+        long triggerAtTime = System.currentTimeMillis() + 20 * 60 * 1000;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtTime,
+                    pendSender);
+//            am.setWindow(AlarmManager.RTC_WAKEUP, triggerAtTime,  1000, pendSender);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            am.setExact(AlarmManager.RTC_WAKEUP, triggerAtTime,
+                    pendSender);
+//            am.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtTime,  1000, pendSender);
+        } else {
+            am.set(AlarmManager.RTC_WAKEUP, triggerAtTime,
+                    pendSender);
+        }
     }
 }

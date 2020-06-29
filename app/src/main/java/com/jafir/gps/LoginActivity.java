@@ -54,7 +54,6 @@ public class LoginActivity extends FrameActivity {
                 }, e -> {
                     Log.e("login", "service login err:" + e.getMessage());
                 });
-
         startService(new Intent(this, KeepLiveService.class));
     }
 }

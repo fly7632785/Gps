@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Gps</string>
+    <string name="app_name">查找手机</string>
     <string name="title_activity_login2">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
