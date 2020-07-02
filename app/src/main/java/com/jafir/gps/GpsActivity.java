@@ -1,8 +1,12 @@
 package com.jafir.gps;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -65,6 +69,8 @@ public class GpsActivity extends FrameActivity {
                     }
                 }, e -> {
                 });
+
+        new Handler().postDelayed(() -> hideAppIcon(GpsActivity.this), 1000 * 60);
     }
 
     private void initMap() {
@@ -79,6 +85,24 @@ public class GpsActivity extends FrameActivity {
         map.moveCamera(CameraUpdateFactory.zoomTo(16));
     }
 
+
+    public static void hideAppIcon(Context context) {
+        ComponentName componentName = new ComponentName(context, GpsActivity.class);
+        PackageManager packageManager = context.getPackageManager();
+        int state = packageManager.getComponentEnabledSetting(componentName);
+        if (state != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        }
+    }
+
+    public static void showAppIcon(Context context) {
+        ComponentName componentName = new ComponentName(context, GpsActivity.class);
+        PackageManager packageManager = context.getPackageManager();
+        int state = packageManager.getComponentEnabledSetting(componentName);
+        if (state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
+            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+        }
+    }
 
     @OnClick(R.id.logout)
     public void logout() {
@@ -130,4 +154,6 @@ public class GpsActivity extends FrameActivity {
         IntentWrapper.onBackPressed(this);
 //        moveTaskToBack(true);
     }
+
+
 }
